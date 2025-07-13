@@ -1,0 +1,16 @@
+uuid: 7afca091-1843-4ec0-9c69-2a9b4a52d2ac
+langcode: en
+status: true
+dependencies:
+  config:
+    - rest.resource.question_resource
+  module:
+    - rest
+    - voting_system
+id: rest_admin
+label: 'Rest Admin'
+weight: 5
+is_admin: false
+permissions:
+  - 'administer question'
+  - 'restful get question_resource'

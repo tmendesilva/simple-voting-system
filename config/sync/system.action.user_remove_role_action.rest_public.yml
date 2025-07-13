@@ -1,0 +1,14 @@
+uuid: edb919e3-a556-42e4-bcb8-ae495c330b79
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.rest_public
+  module:
+    - user
+id: user_remove_role_action.rest_public
+label: 'Remove the Rest Public role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: rest_public

@@ -1,0 +1,18 @@
+uuid: a72feea1-0a3f-4147-adb5-0b3a518adbf2
+langcode: en
+status: true
+dependencies:
+  module:
+    - basic_auth
+    - serialization
+    - voting_system
+id: question_resource
+plugin_id: question_resource
+granularity: resource
+configuration:
+  methods:
+    - GET
+  formats:
+    - json
+  authentication:
+    - basic_auth

@@ -1,0 +1,14 @@
+uuid: 9356c3f3-7204-417d-8c13-d57035440e27
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.rest_admin
+  module:
+    - user
+id: user_remove_role_action.rest_admin
+label: 'Remove the Rest Admin role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: rest_admin

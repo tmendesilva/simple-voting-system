@@ -1,0 +1,18 @@
+uuid: b1252221-b0c4-48f6-8285-40e512275565
+langcode: en
+status: true
+dependencies:
+  module:
+    - serialization
+    - voting_system
+_core:
+  default_config_hash: 5vILat1cLLsPBYEuYvb7lqZq1GqE-E35GAX5JwCcO-U
+id: question_resource_config
+plugin_id: question_resource
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - basic_auth

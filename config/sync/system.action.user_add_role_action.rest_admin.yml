@@ -1,0 +1,14 @@
+uuid: ce4012d0-86fa-47e0-827d-f9f41bbdd31e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.rest_admin
+  module:
+    - user
+id: user_add_role_action.rest_admin
+label: 'Add the Rest Admin role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: rest_admin

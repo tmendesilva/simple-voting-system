@@ -2,6 +2,7 @@ name: simple-voting-system
 recipe: drupal11
 config:
   webroot: web
+  xdebug: true
 tooling:
   phpcs:
     service: appserver

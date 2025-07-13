@@ -6,6 +6,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\rest\Attribute\RestResource;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\voting_system\Entity\Question;
 
 /**
  * Provides a Question Resource.
@@ -25,7 +26,11 @@ class QuestionResource extends ResourceBase {
    * @return \Drupal\rest\ResourceResponse
    */
   public function get() {
-    $response = ['message' => 'Hello, this is question service'];
+    $questions = Question::loadMultiple();
+    $response = [
+      'message' => 'Hello, this is question service',
+      'data' => $questions,
+    ];
     return new ResourceResponse($response);
   }
 

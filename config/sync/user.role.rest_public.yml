@@ -1,0 +1,9 @@
+uuid: eae88561-ad0a-4c1d-9022-ab5ac2c26000
+langcode: en
+status: true
+dependencies: {  }
+id: rest_public
+label: 'Rest Public'
+weight: 4
+is_admin: false
+permissions: {  }
