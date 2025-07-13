@@ -1,0 +1,11 @@
+name: simple-voting-system
+recipe: drupal11
+config:
+  webroot: web
+tooling:
+  phpcs:
+    service: appserver
+    cmd: /app/vendor/bin/phpcs
+  phpcbf:
+    service: appserver
+    cmd: /app/vendor/bin/phpcbf

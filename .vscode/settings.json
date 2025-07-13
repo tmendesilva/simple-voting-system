@@ -1,0 +1,25 @@
+{
+  "phpsab.docker.snifferEnable": true,
+  "phpsab.docker.fixerEnable": true,
+  "phpsab.docker.standard": "Drupal,DrupalPractice",
+  "phpsab.docker.executablePathCS": "",
+  "phpsab.docker.executablePathCBF": "",
+  "phpsab.docker.dockerEnabled": true,
+  "phpsab.docker.debug": true,
+  "phpsab.docker.snifferMode": "onSave",
+  "phpsab.docker.dockerContainer": "simplevotingsystem_appserver_1",
+  "phpsab.docker.dockerWorkspaceRoot": "/app/",
+  "phpsab.docker.dockerExecutablePathCS": "/app/vendor/bin/phpcs",
+  "phpsab.docker.dockerExecutablePathCBF": "/app/vendor/bin/phpcbf",
+  "phpsab.docker.snifferArguments": [
+    "--extensions=php,module,inc,install,test,profile,theme",
+    "--ignore=web/core,vendor"
+  ],
+  "phpsab.docker.fixerArguments": [
+    "--extensions=php,module,inc,install,test,profile,theme",
+    "--ignore=web/core,vendor"
+  ],
+  "[php]": {
+    "editor.defaultFormatter": "mtbdata.vscode-phpsab-docker"
+  }
+}
