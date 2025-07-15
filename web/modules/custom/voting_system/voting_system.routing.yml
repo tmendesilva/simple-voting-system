@@ -3,8 +3,8 @@ voting_system.status:
   defaults:
     _controller: '\Drupal\voting_system\Controller\VotingSystemController::content'
     _title: "Vote System Status"
+  methods: [PUT]
   requirements:
     _permission: "Administer voting"
-    _method: "PUT"
   options:
     _auth: ["basic_auth"]

@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "Change Module Status",
+			"name": "Change voting system status",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -32,7 +32,7 @@
 				}
 			],
 			"request": {
-				"method": "GET",
+				"method": "PUT",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -51,8 +51,8 @@
 					}
 				],
 				"url": {
-					"raw": "https://simple-voting-system.lndo.site/vote_system/status",
-					"protocol": "https",
+					"raw": "http://simple-voting-system.lndo.site/vote_system/status",
+					"protocol": "http",
 					"host": [
 						"simple-voting-system",
 						"lndo",
@@ -67,69 +67,7 @@
 			"response": []
 		},
 		{
-			"name": "Gets question details",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"exec": [],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YXBpX2FkbWluOmFwaUB0ZXN0",
-						"type": "text"
-					},
-					{
-						"key": "X-CSRF-Token",
-						"value": "gW8KSABrBSKX80M7fMq7VWUU_fscIvc8QY7ImilqMC0",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "https://simple-voting-system.lndo.site/vote_system/question?_format=json",
-					"protocol": "https",
-					"host": [
-						"simple-voting-system",
-						"lndo",
-						"site"
-					],
-					"path": [
-						"vote_system",
-						"question"
-					],
-					"query": [
-						{
-							"key": "_format",
-							"value": "json"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Creates new questions",
+			"name": "Create new question",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -159,8 +97,73 @@
 					}
 				},
 				"url": {
-					"raw": "https://simple-voting-system.lndo.site/vote_system/question?_format=json",
-					"protocol": "https",
+					"raw": "http://simple-voting-system.lndo.site/vote_system/question?_format=json",
+					"protocol": "http",
+					"host": [
+						"simple-voting-system",
+						"lndo",
+						"site"
+					],
+					"path": [
+						"vote_system",
+						"question"
+					],
+					"query": [
+						{
+							"key": "_format",
+							"value": "json"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Gets question details",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic YXBpX2FkbWluOmFwaUB0ZXN0",
+						"type": "text"
+					},
+					{
+						"key": "X-CSRF-Token",
+						"value": "gW8KSABrBSKX80M7fMq7VWUU_fscIvc8QY7ImilqMC0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://simple-voting-system.lndo.site/vote_system/question?_format=json",
+					"protocol": "http",
 					"host": [
 						"simple-voting-system",
 						"lndo",
@@ -211,8 +214,8 @@
 					}
 				},
 				"url": {
-					"raw": "https://simple-voting-system.lndo.site/vote_system/question?_format=json",
-					"protocol": "https",
+					"raw": "http://simple-voting-system.lndo.site/vote_system/question?_format=json",
+					"protocol": "http",
 					"host": [
 						"simple-voting-system",
 						"lndo",

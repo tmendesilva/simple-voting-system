@@ -15,12 +15,17 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
  *
  * @ContentEntityType(
  *   id = "question",
- *   label = @Translation("question"),
+ *   label = @Translation("Question"),
  *   base_table = "question",
  *   entity_keys = {
  *     "id" = "id",
  *     "title" = "title",
+ *     "answers" = "answers",
  *   },
+ *   handlers = {
+ *     "views_data" = "Drupal\views\EntityViewsData"
+ *   },
+ *   field_ui_base_route="entity.question.settings"
  * )
  */
 class Question extends ContentEntityBase implements ContentEntityInterface {

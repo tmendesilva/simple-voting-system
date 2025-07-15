@@ -14,7 +14,7 @@ use Drupal\Core\Entity\ContentEntityInterface;
  *
  * @ContentEntityType(
  *   id = "answer",
- *   label = @Translation("answer"),
+ *   label = @Translation("Answer"),
  *   base_table = "answer",
  *   entity_keys = {
  *     "id" = "id",
@@ -23,12 +23,16 @@ use Drupal\Core\Entity\ContentEntityInterface;
  *     "votes" = "votes",
  *     "image" = "image",
  *   },
+ *    handlers = {
+ *     "views_data" = "Drupal\views\EntityViewsData"
+ *   },
+ *   field_ui_base_route="entity.answer.settings"
  * )
  */
 class Answer extends ContentEntityBase implements ContentEntityInterface {
 
   /**
-   *
+   * {@inheritDoc}
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
 
