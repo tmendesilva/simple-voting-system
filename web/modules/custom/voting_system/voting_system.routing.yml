@@ -1,31 +1,10 @@
-entity.question.collection:
-  path: "/admin/structure/question"
+voting_system.status:
+  path: "/vote_system/status"
   defaults:
-    _entity_list: "question"
-    _title: "Question configuration"
+    _controller: '\Drupal\voting_system\Controller\VotingSystemController::content'
+    _title: "Vote System Status"
   requirements:
-    _permission: "administer question"
-
-entity.question.add_form:
-  path: "/admin/structure/question/add"
-  defaults:
-    _entity_form: "question.add"
-    _title: "Add a question"
-  requirements:
-    _permission: "administer question"
-
-entity.question.edit_form:
-  path: "/admin/structure/question/{question}"
-  defaults:
-    _entity_form: "question.edit"
-    _title: "Edit a question"
-  requirements:
-    _permission: "administer question"
-
-entity.question.delete_form:
-  path: "/admin/structure/question/{question}/delete"
-  defaults:
-    _entity_form: "question.delete"
-    _title: "Delete a question"
-  requirements:
-    _permission: "administer question"
+    _permission: "Administer voting"
+    _method: "PUT"
+  options:
+    _auth: ["basic_auth"]

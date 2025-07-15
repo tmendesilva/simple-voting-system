@@ -1,72 +1,59 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Drupal\voting_system\Entity;
 
-use Drupal\Core\Config\Entity\ConfigEntityBase;
-use Drupal\Core\Entity\Attribute\ConfigEntityType;
-use Drupal\Core\Entity\EntityDeleteForm;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\voting_system\Form\QuestionForm;
-use Drupal\voting_system\QuestionInterface;
-use Drupal\voting_system\QuestionListBuilder;
+use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 
 /**
- * Defines the question entity type.
+ * Defines the question entity.
+ *
+ * @ingroup question
+ *
+ * @ContentEntityType(
+ *   id = "question",
+ *   label = @Translation("question"),
+ *   base_table = "question",
+ *   entity_keys = {
+ *     "id" = "id",
+ *     "title" = "title",
+ *   },
+ * )
  */
-#[ConfigEntityType(
-  id: 'question',
-  label: new TranslatableMarkup('Question'),
-  label_collection: new TranslatableMarkup('Questions'),
-  label_singular: new TranslatableMarkup('question'),
-  label_plural: new TranslatableMarkup('questions'),
-  config_prefix: 'question',
-  entity_keys: [
-    'id' => 'id',
-    'label' => 'label',
-    'uuid' => 'uuid',
-  ],
-  handlers: [
-    'list_builder' => QuestionListBuilder::class,
-    'form' => [
-      'add' => QuestionForm::class,
-      'edit' => QuestionForm::class,
-      'delete' => EntityDeleteForm::class,
-    ],
-  ],
-  links: [
-    'collection' => '/admin/structure/question',
-    'add-form' => '/admin/structure/question/add',
-    'edit-form' => '/admin/structure/question/{question}',
-    'delete-form' => '/admin/structure/question/{question}/delete',
-  ],
-  admin_permission: 'administer question',
-  label_count: [
-    'singular' => '@count question',
-    'plural' => '@count questions',
-  ],
-  config_export: [
-    'id',
-    'label',
-    'description',
-  ],
-)]
-final class Question extends ConfigEntityBase implements QuestionInterface {
+class Question extends ContentEntityBase implements ContentEntityInterface {
 
   /**
-   * The example ID.
+   *
    */
-  protected string $id;
+  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
 
-  /**
-   * The example label.
-   */
-  protected string $label;
+    // Standard field, used as unique if primary index.
+    $fields['id'] = BaseFieldDefinition::create('integer')
+      ->setLabel(t('ID'))
+      ->setDescription(t('The ID of the Question entity.'))
+      ->setRequired(TRUE);
 
-  /**
-   * The example description.
-   */
-  protected string $description;
+    // Standard field, unique outside of the scope of the current project.
+    $fields['title'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Title'))
+      ->setDescription(t('The title of the Question entity.'))
+      ->setRequired(TRUE);
+
+    // Standard field, unique outside of the scope of the current project.
+    $fields['answers'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Answers'))
+      ->setDescription(t('The title of the Question entity.'))
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setSettings([
+        'target_type' => 'answer',
+        'default_value' => [],
+      ])
+      ->setRequired(TRUE);
+
+    return $fields;
+  }
 
 }

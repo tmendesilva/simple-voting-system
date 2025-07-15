@@ -1,9 +1,14 @@
 uuid: eae88561-ad0a-4c1d-9022-ab5ac2c26000
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - rest.resource.question_resource
+  module:
+    - rest
 id: rest_public
 label: 'Rest Public'
 weight: 4
 is_admin: false
-permissions: {  }
+permissions:
+  - 'restful patch question_resource'

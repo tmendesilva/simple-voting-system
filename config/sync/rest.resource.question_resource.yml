@@ -12,6 +12,8 @@ granularity: resource
 configuration:
   methods:
     - GET
+    - POST
+    - PATCH
   formats:
     - json
   authentication:

@@ -1,5 +1,0 @@
-entity.question.overview:
-  title: Questions
-  parent: system.admin_structure
-  description: "List of questions."
-  route_name: entity.question.collection

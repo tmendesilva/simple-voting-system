@@ -5,7 +5,7 @@ websites ranging from personal weblogs to large community-driven websites. For
 more information, visit the Drupal website, [Drupal.org][Drupal.org], and join
 the [Drupal community][Drupal community].
 
-## Contributing
+## Simple Voting System
 
 Drupal is developed on [Drupal.org][Drupal.org], the home of the international
 Drupal community since 2001!
@@ -33,8 +33,7 @@ before writing a single line of code.
 ## Changelog
 
 Drupal keeps detailed [change records][changelog]. You can search Drupal's
-changes for a record of every notable breaking change and new feature since
-2011.
+changes for a record of every notable breaking change and new feature since 2011.
 
 ## Security
 

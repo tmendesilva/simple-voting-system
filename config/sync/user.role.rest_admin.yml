@@ -12,5 +12,8 @@ label: 'Rest Admin'
 weight: 5
 is_admin: false
 permissions:
-  - 'administer question'
+  - 'Administer voting'
+  - 'administer rest resources'
   - 'restful get question_resource'
+  - 'restful patch question_resource'
+  - 'restful post question_resource'
