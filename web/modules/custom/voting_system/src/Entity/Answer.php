@@ -1,71 +1,139 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\voting_system\Entity;
 
+use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
-use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Entity\ContentEntityDeleteForm;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\Form\DeleteMultipleForm;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\views\EntityViewsData;
+use Drupal\voting_system\AnswerInterface;
+use Drupal\voting_system\AnswerListBuilder;
+use Drupal\voting_system\Form\AnswerForm;
+use Drupal\voting_system\Routing\AnswerHtmlRouteProvider;
 
 /**
- * Defines the answer entity.
- *
- * @ingroup answer
- *
- * @ContentEntityType(
- *   id = "answer",
- *   label = @Translation("Answer"),
- *   base_table = "answer",
- *   entity_keys = {
- *     "id" = "id",
- *     "title" = "title",
- *     "description" = "description",
- *     "votes" = "votes",
- *     "image" = "image",
- *   },
- *    handlers = {
- *     "views_data" = "Drupal\views\EntityViewsData"
- *   },
- *   field_ui_base_route="entity.answer.settings"
- * )
+ * Defines the answer entity class.
  */
-class Answer extends ContentEntityBase implements ContentEntityInterface {
+#[ContentEntityType(
+  id: 'voting_system_answer',
+  label: new TranslatableMarkup('Answer'),
+  label_collection: new TranslatableMarkup('Answers'),
+  label_singular: new TranslatableMarkup('answer'),
+  label_plural: new TranslatableMarkup('answers'),
+  entity_keys: [
+    'id' => 'id',
+    'title' => 'title',
+    'description' => 'description',
+    'image' => 'image',
+    'votes' => 'votes',
+    'langcode' => 'langcode',
+    'published' => 'status',
+  ],
+  handlers: [
+    'list_builder' => AnswerListBuilder::class,
+    'views_data' => EntityViewsData::class,
+    'form' => [
+      'add' => AnswerForm::class,
+      'edit' => AnswerForm::class,
+      'delete' => ContentEntityDeleteForm::class,
+      'delete-multiple-confirm' => DeleteMultipleForm::class,
+    ],
+    'route_provider' => [
+      'html' => AnswerHtmlRouteProvider::class,
+    ],
+  ],
+  links: [
+    'collection' => '/admin/content/answer',
+    'add-form' => '/answer/add',
+    'canonical' => '/answer/{voting_system_answer}',
+    'edit-form' => '/answer/{voting_system_answer}',
+    'delete-form' => '/answer/{voting_system_answer}/delete',
+    'delete-multiple-form' => '/admin/content/answer/delete-multiple',
+  ],
+  admin_permission: 'administer voting_system_answer',
+  base_table: 'voting_system_answer',
+  data_table: 'voting_system_answer_field_data',
+  translatable: TRUE,
+  label_count: [
+    'singular' => '@count answers',
+    'plural' => '@count answers',
+  ],
+  field_ui_base_route: 'entity.voting_system_answer.settings',
+)]
+class Answer extends ContentEntityBase implements AnswerInterface {
 
   /**
-   * {@inheritDoc}
+   * {@inheritdoc}
    */
-  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+  public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
 
-    $fields['id'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('ID'))
-      ->setRequired(TRUE);
+    $fields = parent::baseFieldDefinitions($entity_type);
 
     $fields['title'] = BaseFieldDefinition::create('string')
+      ->setTranslatable(TRUE)
       ->setLabel(t('Title'))
-      ->setRequired(TRUE);
+      ->setRequired(TRUE)
+      ->setSetting('max_length', 255)
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => -5,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'string',
+        'weight' => -5,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['description'] = BaseFieldDefinition::create('text_long')
+      ->setTranslatable(TRUE)
       ->setLabel(t('Description'))
-      ->setRequired(TRUE);
+      ->setDisplayOptions('form', [
+        'type' => 'text_textarea',
+        'weight' => 10,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'type' => 'text_default',
+        'label' => 'above',
+        'weight' => 10,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
 
     $fields['votes'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Votes'))
       ->setDefaultValue(0)
       ->setRequired(TRUE);
 
-    // $fields['image'] = BaseFieldDefinition::create('image')
-    //   ->setLabel(t('Image'))
-    //   ->setCardinality(1)
-    //   ->setSettings([
-    //     'target_type' => 'file',
-    //     'handler' => 'default:file',
-    //     'file_extensions' => 'png jpg jpeg',
-    //     'default_image' => [
-    //       'uuid' => NULL,
-    //       'alt' => NULL,
-    //       'title' => NULL,
-    //     ],
-    //   ]);
+    $fields['status'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Status'))
+      ->setDefaultValue(TRUE)
+      ->setSetting('on_label', 'Enabled')
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => FALSE,
+        ],
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'type' => 'boolean',
+        'label' => 'above',
+        'weight' => 0,
+        'settings' => [
+          'format' => 'enabled-disabled',
+        ],
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
     return $fields;
   }
 

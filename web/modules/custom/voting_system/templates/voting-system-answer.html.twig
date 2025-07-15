@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Default theme implementation to present a question entity.
+ *
+ * This template is used when viewing a canonical question page,
+ *
+ * Available variables:
+ * - content: A list of content items. Use 'content' to print all content, or
+ *   print a subset such as 'content.label'.
+ * - attributes: HTML attributes for the container element.
+ *
+ * @see template_preprocess_voting_system_question()
+ */
+#}
+<table>
+  <thead>
+    <tr>
+      <th>{{'Options' | t}}</th>
+      <th>{{'Votes' | t}}</th>
+      <th>{{'Percentage' | t}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for answer in answers %}
+    <tr>
+      <td>{{ answer.title }}</td>
+      <td>{{ answer.votes }}</td>
+      <td>{{ answer.percentage | number_format(2) }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,2 +1,10 @@
 Administer voting:
   title: "Administer voting"
+
+administer voting_system_question:
+  title: 'Administer questions'
+  restrict access: true
+
+administer voting_system_answer:
+  title: 'Administer answers'
+  restrict access: true

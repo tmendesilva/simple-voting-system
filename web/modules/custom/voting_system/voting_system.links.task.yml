@@ -1,0 +1,32 @@
+entity.voting_system_question.settings:
+  title: 'Settings'
+  route_name: entity.voting_system_question.settings
+  base_route: entity.voting_system_question.settings
+entity.voting_system_question.view:
+  title: 'View'
+  route_name: entity.voting_system_question.canonical
+  base_route: entity.voting_system_question.canonical
+entity.voting_system_question.edit_form:
+  title: 'Edit'
+  route_name: entity.voting_system_question.edit_form
+  base_route: entity.voting_system_question.canonical
+entity.voting_system_question.delete_form:
+  title: 'Delete'
+  route_name: entity.voting_system_question.delete_form
+  base_route: entity.voting_system_question.canonical
+  weight: 10
+entity.voting_system_question.collection:
+  title: 'Questions'
+  route_name: entity.voting_system_question.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.voting_system_answer.settings:
+  title: 'Settings'
+  route_name: entity.voting_system_answer.settings
+  base_route: entity.voting_system_answer.settings
+entity.voting_system_answer.collection:
+  title: 'Answers'
+  route_name: entity.voting_system_answer.collection
+  base_route: system.admin_content
+  weight: 10

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - voting_system
+id: voting_system_answer_delete_action
+label: 'Delete answers'
+type: voting_system_answer
+plugin: entity:delete_action:voting_system_answer
+configuration: {  }

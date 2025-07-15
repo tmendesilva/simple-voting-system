@@ -11,6 +11,7 @@ use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\voting_system\Entity\Answer;
 use Drupal\voting_system\Entity\Question;
+use Drupal\voting_system\Service\QuestionService;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -42,7 +43,22 @@ class QuestionResource extends ResourceBase {
    */
   private bool $isActive = FALSE;
 
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, ConfigFactoryInterface $config_factory) {
+  /**
+   * The question service.
+   *
+   * @var \Drupal\voting_system\Service\QuestionService
+   */
+  private QuestionService $questionService;
+
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    array $serializer_formats,
+    LoggerInterface $logger,
+    ConfigFactoryInterface $config_factory,
+    QuestionService $question_service,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger, $config_factory);
     $this->serializerFormats = $serializer_formats;
     $this->logger = $logger;
@@ -50,6 +66,7 @@ class QuestionResource extends ResourceBase {
 
     $config = $this->configFactory->getEditable('voting_system.settings');
     $this->isActive = (bool) $config->get('voting_system_status') ?? TRUE;
+    $this->questionService = $question_service;
   }
 
   /**
@@ -62,7 +79,8 @@ class QuestionResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('rest'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('voting_system.question_service'),
     );
   }
 
@@ -96,8 +114,8 @@ class QuestionResource extends ResourceBase {
     }
     $questions = [];
     foreach ($questionsEntities as $questionEntity) {
-      $question = $this->getFieldValues($questionEntity);
-      $question['answers'] = $this->getAnswerFieldValues($questionEntity);
+      $question = $this->questionService->getFieldValues($questionEntity);
+      $question['answers'] = $this->questionService->getAnswerFieldValues($questionEntity);
       $questions[] = $question;
     }
     $response = [
@@ -115,10 +133,9 @@ class QuestionResource extends ResourceBase {
    * @throws \Exception
    */
   public function post($data) {
-
-    $data['answers'] = $this->createAnswers($data);
-    $question = Question::create($data);
     try {
+      $data['answers'] = $this->questionService->createAnswers($data);
+      $question = Question::create($data);
       $question->save();
       return new ModifiedResourceResponse([
         'message' => $this->t('Question created successfully'),
@@ -127,7 +144,7 @@ class QuestionResource extends ResourceBase {
     }
     catch (\Exception $e) {
       return new ModifiedResourceResponse([
-        'message' => $this->t('Error saving question: @message', ['@message' => $e->getMessage()]),
+        'message' => $this->t('Error on saving entity: @message', ['@message' => $e->getMessage()]),
       ], 400);
     }
   }
@@ -157,7 +174,7 @@ class QuestionResource extends ResourceBase {
       ], 404);
     }
 
-    $answers = $this->getAnswerFieldValues($questionEntity);
+    $answers = $this->questionService->getAnswerFieldValues($questionEntity);
     $answerIds = array_column($answers, 'id');
     $answerId = $data['answer'] ?? NULL;
     if (!in_array($answerId, $answerIds)) {
@@ -180,81 +197,6 @@ class QuestionResource extends ResourceBase {
         'message' => $this->t('Error on adding vote to question!'),
       ], 400);
     }
-  }
-
-  /**
-   * Gets field values.
-   *
-   * @param \Drupal\voting_system\Entity\Question $entity
-   *   The question entity.
-   *
-   * @return array
-   *   the field values
-   */
-  protected function getFieldValues($entity) {
-    $fieldValues = [];
-    foreach ($entity->getFields() as $attr => $field) {
-      $fieldValues[$attr] = $field->value;
-    }
-    return $fieldValues;
-  }
-
-  /**
-   * Gets answer field values.
-   *
-   * @param \Drupal\voting_system\Entity\Question $questionEntity
-   *   The answer entities.
-   *
-   * @return array
-   *   The field values
-   */
-  protected function getAnswerFieldValues($questionEntity) {
-    $answerEntities = $questionEntity->get('answers')->referencedEntities();
-    $answerValues = [];
-    foreach ($answerEntities as $answerEntity) {
-      $answerValues[] = $this->getFieldValues($answerEntity);
-    }
-
-    // Calculate percentage.
-    $account = \Drupal::currentUser();
-    if (in_array('rest_admin', $account->getRoles())) {
-      $totalVotes = array_sum(array_column($answerValues, 'votes'));
-      foreach ($answerValues as $i => $answerValue) {
-        $answerValues[$i]['percentage'] = $totalVotes ? $answerValue['votes'] / $totalVotes : 0;
-      }
-    }
-
-    return $answerValues;
-  }
-
-  /**
-   * Creates answers.
-   *
-   * @param array $data
-   *   The POST data.
-   *
-   * @return array
-   *   The answer ids.
-   */
-  protected function createAnswers($data) {
-    $answerIds = [];
-    foreach ($data['answers'] ?? [] as $answerData) {
-      $answerData['description'] = [
-        'format' => 'plain_text',
-        'value' => $answerData['description'],
-      ];
-      $answer = Answer::create($answerData);
-      try {
-        $answer->save();
-        $answerIds[] = $answer->id();
-      }
-      catch (\Exception $e) {
-        return new ModifiedResourceResponse([
-          'message' => $this->t('Error saving answer: @message', ['@message' => $e->getMessage()]),
-        ], 400);
-      }
-    }
-    return $answerIds;
   }
 
 }

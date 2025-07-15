@@ -8,3 +8,19 @@ voting_system.status:
     _permission: "Administer voting"
   options:
     _auth: ["basic_auth"]
+
+entity.voting_system_question.settings:
+  path: 'admin/structure/voting-system-question'
+  defaults:
+    _form: '\Drupal\voting_system\Form\QuestionSettingsForm'
+    _title: 'Question'
+  requirements:
+    _permission: 'administer voting_system_question'
+
+entity.voting_system_answer.settings:
+  path: 'admin/structure/voting-system-answer'
+  defaults:
+    _form: '\Drupal\voting_system\Form\AnswerSettingsForm'
+    _title: 'Answer'
+  requirements:
+    _permission: 'administer voting_system_answer'
