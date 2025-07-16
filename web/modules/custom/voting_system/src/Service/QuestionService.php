@@ -2,8 +2,10 @@
 
 namespace Drupal\voting_system\Service;
 
+use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\voting_system\QuestionInterface;
 
 /**
  *
@@ -95,6 +97,41 @@ class QuestionService {
       $answerIds[] = $answer->id();
     }
     return $answerIds;
+  }
+
+  /**
+   * Loads a random question.
+   *
+   * @return \Drupal\Core\Entity\QuestionInterface|null
+   *   The random entity object, or NULL if no entity is found.
+   */
+  public function loadRandomQuestion(): QuestionInterface|null {
+    $query = Database::getConnection()->select('voting_system_question_field_data', 'q')
+      ->fields('q', ['id'])
+      ->condition('status', 1);
+
+    $query->orderRandom()
+      ->range(0, 1);
+
+    $result = $query->execute()->fetchAssoc();
+
+    if ($result) {
+      return $this->questionEntityStorage->load($result['id']);
+    }
+
+    return NULL;
+  }
+
+  /**
+   *
+   */
+  public function getAnswerAllowedValues() :array {
+    $answerOptions = Database::getConnection()->select('voting_system_question_field_data', 'q')
+      ->fields('q', ['id'])
+      ->condition('status', 1)
+      ->execute()
+      ->fetchAllKeyed(0, 1);
+    return array_keys($answerOptions);
   }
 
 }

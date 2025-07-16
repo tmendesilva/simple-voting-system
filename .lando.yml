@@ -2,9 +2,10 @@ name: simple-voting-system
 recipe: drupal11
 config:
   webroot: web
+  # database: postgres
   xdebug: true
   config:
-    php: ./.lando/php-ini-overrides.ini
+    php: lando/php.ini
 tooling:
   phpcs:
     service: appserver

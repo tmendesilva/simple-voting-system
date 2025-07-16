@@ -21,8 +21,8 @@ use Psr\Log\LoggerInterface;
   id: "question_resource",
   label: new TranslatableMarkup("QuestionResource"),
   uri_paths: [
-    "canonical" => "/vote_system/question/{id}",
-    "create" => "/vote_system/question",
+    "canonical" => "/vote-system/question/{id}",
+    "create" => "/vote-system/question",
   ]
 )]
 class QuestionResource extends ResourceBase {

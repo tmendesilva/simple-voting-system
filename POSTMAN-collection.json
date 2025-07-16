@@ -1,239 +1,203 @@
 {
-	"info": {
-		"_postman_id": "5d63c90c-998f-4b19-81b7-52b9cb67a8f1",
-		"name": "simple-voting-system",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "46696839",
-		"_collection_link": "https://tiago-8695561.postman.co/workspace/Tiago's-Workspace~5d812359-f9b2-4e6d-83c2-b267f65824f3/collection/46696839-5d63c90c-998f-4b19-81b7-52b9cb67a8f1?action=share&source=collection_link&creator=46696839"
-	},
-	"item": [
-		{
-			"name": "Change voting system status",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YXBpX2FkbWluOmFwaUB0ZXN0",
-						"type": "text"
-					},
-					{
-						"key": "X-CSRF-Token",
-						"value": "gW8KSABrBSKX80M7fMq7VWUU_fscIvc8QY7ImilqMC0",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://simple-voting-system.lndo.site/vote_system/status",
-					"protocol": "http",
-					"host": [
-						"simple-voting-system",
-						"lndo",
-						"site"
-					],
-					"path": [
-						"vote_system",
-						"status"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create new question",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YXBpX2FkbWluOmFwaUB0ZXN0",
-						"type": "text"
-					},
-					{
-						"key": "X-CSRF-Token",
-						"value": "QlbshS1zwZDy0LoJTSkDzX2EztvL_ZQkzf9rGnz8HDY",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"id\": \"{{$randomInt}}\",\n    \"title\": \"{{$randomWords}}?\",\n    \"answers\": [\n        {\n          \"id\": \"{{$randomInt}}\",  \n          \"title\": \"{{$randomWord}}\",\n          \"description\": \"{{$randomLoremSentence}}\"\n        },\n        {\n          \"id\": \"{{$randomInt}}\",  \n          \"title\": \"{{$randomWord}}\",\n          \"description\": \"{{$randomLoremSentence}}\"\n        },\n        {\n          \"id\": \"{{$randomInt}}\",  \n          \"title\": \"{{$randomWord}}\",\n          \"description\": \"{{$randomLoremSentence}}\"\n        }\n    ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://simple-voting-system.lndo.site/vote_system/question?_format=json",
-					"protocol": "http",
-					"host": [
-						"simple-voting-system",
-						"lndo",
-						"site"
-					],
-					"path": [
-						"vote_system",
-						"question"
-					],
-					"query": [
-						{
-							"key": "_format",
-							"value": "json"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Gets question details",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YXBpX2FkbWluOmFwaUB0ZXN0",
-						"type": "text"
-					},
-					{
-						"key": "X-CSRF-Token",
-						"value": "gW8KSABrBSKX80M7fMq7VWUU_fscIvc8QY7ImilqMC0",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://simple-voting-system.lndo.site/vote_system/question?_format=json",
-					"protocol": "http",
-					"host": [
-						"simple-voting-system",
-						"lndo",
-						"site"
-					],
-					"path": [
-						"vote_system",
-						"question"
-					],
-					"query": [
-						{
-							"key": "_format",
-							"value": "json"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Voting",
-			"request": {
-				"method": "PATCH",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YXBpX2FkbWluOmFwaUB0ZXN0",
-						"type": "text"
-					},
-					{
-						"key": "X-CSRF-Token",
-						"value": "QlbshS1zwZDy0LoJTSkDzX2EztvL_ZQkzf9rGnz8HDY",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"question\": 56,\n    \"answer\": 387\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://simple-voting-system.lndo.site/vote_system/question?_format=json",
-					"protocol": "http",
-					"host": [
-						"simple-voting-system",
-						"lndo",
-						"site"
-					],
-					"path": [
-						"vote_system",
-						"question"
-					],
-					"query": [
-						{
-							"key": "_format",
-							"value": "json"
-						}
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "5d63c90c-998f-4b19-81b7-52b9cb67a8f1",
+    "name": "simple-voting-system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46696839",
+    "_collection_link": "https://tiago-8695561.postman.co/workspace/Tiago's-Workspace~5d812359-f9b2-4e6d-83c2-b267f65824f3/collection/46696839-5d63c90c-998f-4b19-81b7-52b9cb67a8f1?action=share&source=collection_link&creator=46696839"
+  },
+  "item": [
+    {
+      "name": "Change voting system status",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [""],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [""],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Basic YXBpX2FkbWluOmFwaUB0ZXN0",
+            "type": "text"
+          },
+          {
+            "key": "X-CSRF-Token",
+            "value": "gW8KSABrBSKX80M7fMq7VWUU_fscIvc8QY7ImilqMC0",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://simple-voting-system.lndo.site/vote-system/status",
+          "protocol": "http",
+          "host": ["simple-voting-system", "lndo", "site"],
+          "path": ["vote-system", "status"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create new question",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Basic YXBpX2FkbWluOmFwaUB0ZXN0",
+            "type": "text"
+          },
+          {
+            "key": "X-CSRF-Token",
+            "value": "QlbshS1zwZDy0LoJTSkDzX2EztvL_ZQkzf9rGnz8HDY",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"id\": \"{{$randomInt}}\",\n    \"title\": \"{{$randomWords}}?\",\n    \"answers\": [\n        {\n          \"id\": \"{{$randomInt}}\",  \n          \"title\": \"{{$randomWord}}\",\n          \"description\": \"{{$randomLoremSentence}}\"\n        },\n        {\n          \"id\": \"{{$randomInt}}\",  \n          \"title\": \"{{$randomWord}}\",\n          \"description\": \"{{$randomLoremSentence}}\"\n        },\n        {\n          \"id\": \"{{$randomInt}}\",  \n          \"title\": \"{{$randomWord}}\",\n          \"description\": \"{{$randomLoremSentence}}\"\n        }\n    ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://simple-voting-system.lndo.site/vote-system/question?_format=json",
+          "protocol": "http",
+          "host": ["simple-voting-system", "lndo", "site"],
+          "path": ["vote-system", "question"],
+          "query": [
+            {
+              "key": "_format",
+              "value": "json"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Gets question details",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [""],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [""],
+            "type": "text/javascript",
+            "packages": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Basic YXBpX2FkbWluOmFwaUB0ZXN0",
+            "type": "text"
+          },
+          {
+            "key": "X-CSRF-Token",
+            "value": "gW8KSABrBSKX80M7fMq7VWUU_fscIvc8QY7ImilqMC0",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://simple-voting-system.lndo.site/vote-system/question?_format=json",
+          "protocol": "http",
+          "host": ["simple-voting-system", "lndo", "site"],
+          "path": ["vote-system", "question"],
+          "query": [
+            {
+              "key": "_format",
+              "value": "json"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Voting",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Basic YXBpX2FkbWluOmFwaUB0ZXN0",
+            "type": "text"
+          },
+          {
+            "key": "X-CSRF-Token",
+            "value": "QlbshS1zwZDy0LoJTSkDzX2EztvL_ZQkzf9rGnz8HDY",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"question\": 56,\n    \"answer\": 387\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://simple-voting-system.lndo.site/vote-system/question?_format=json",
+          "protocol": "http",
+          "host": ["simple-voting-system", "lndo", "site"],
+          "path": ["vote-system", "question"],
+          "query": [
+            {
+              "key": "_format",
+              "value": "json"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
 }

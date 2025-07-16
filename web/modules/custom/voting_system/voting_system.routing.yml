@@ -1,5 +1,5 @@
 voting_system.status:
-  path: "/vote_system/status"
+  path: "/vote-system/status"
   defaults:
     _controller: '\Drupal\voting_system\Controller\VotingSystemController::content'
     _title: "Vote System Status"
@@ -10,17 +10,25 @@ voting_system.status:
     _auth: ["basic_auth"]
 
 entity.voting_system_question.settings:
-  path: 'admin/structure/voting-system-question'
+  path: "admin/structure/voting-system-question"
   defaults:
     _form: '\Drupal\voting_system\Form\QuestionSettingsForm'
-    _title: 'Question'
+    _title: "Question"
   requirements:
-    _permission: 'administer voting_system_question'
+    _permission: "administer voting_system_question"
 
 entity.voting_system_answer.settings:
-  path: 'admin/structure/voting-system-answer'
+  path: "admin/structure/voting-system-answer"
   defaults:
     _form: '\Drupal\voting_system\Form\AnswerSettingsForm'
-    _title: 'Answer'
+    _title: "Answer"
   requirements:
-    _permission: 'administer voting_system_answer'
+    _permission: "administer voting_system_answer"
+
+vote_system.vote:
+  path: "/vote-system/vote"
+  defaults:
+    _form: '\Drupal\voting_system\Form\VotingForm'
+    _title: "Voting"
+  requirements:
+    _permission: "access content"
