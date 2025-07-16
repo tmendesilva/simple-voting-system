@@ -11,7 +11,11 @@ declare(strict_types=1);
  * Provides a question entity type.
  */
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\voting_system\QuestionInterface;
 
 /**
  * Implements hook_theme().
@@ -44,4 +48,14 @@ function template_preprocess_voting_system_question(array &$variables): void {
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
   }
+}
+
+/**
+ * Implements hook_entity_access().
+ */
+function voting_system_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($entity instanceof QuestionInterface && $operation === 'delete') {
+    return AccessResult::forbidden();
+  }
+  return AccessResult::neutral();
 }

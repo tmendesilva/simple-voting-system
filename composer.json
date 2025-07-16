@@ -16,6 +16,7 @@
     ],
     "require": {
         "composer/installers": "^2.3",
+        "cweagans/composer-patches": "^1.7",
         "drupal/core-composer-scaffold": "^11.2",
         "drupal/core-project-message": "^11.2",
         "drupal/core-recipe-unpack": "^11.2",
@@ -30,13 +31,14 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true,
-            "drupal/core-composer-scaffold": true,
-            "drupal/core-recipe-unpack": true,
-            "drupal/core-project-message": true,
-            "phpstan/extension-installer": true,
+            "cweagans/composer-patches": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
+            "drupal/core-recipe-unpack": true,
             "php-http/discovery": true,
-            "php-tuf/composer-integration": true
+            "php-tuf/composer-integration": true,
+            "phpstan/extension-installer": true
         },
         "sort-packages": true
     },
@@ -98,6 +100,11 @@
                 "  * Remove the plugin that prints this message:",
                 "      composer remove drupal/core-project-message"
             ]
+        },
+        "patches": {
+            "drupal/core": {
+                "https://www.drupal.org/project/drupal/issues/3523317#comment-16188037": "https://www.drupal.org/files/issues/2025-07-11/fix-type-error-null-text-3523317-21.patch"
+            }
         }
     },
     "require-dev": {

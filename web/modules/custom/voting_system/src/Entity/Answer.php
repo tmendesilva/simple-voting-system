@@ -97,13 +97,13 @@ class Answer extends ContentEntityBase implements AnswerInterface {
       ->setLabel(t('Description'))
       ->setDisplayOptions('form', [
         'type' => 'text_textarea',
-        'weight' => 10,
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'type' => 'text_default',
         'label' => 'above',
-        'weight' => 10,
+        'weight' => 0,
       ])
       ->setDisplayConfigurable('view', TRUE);
 
@@ -121,13 +121,13 @@ class Answer extends ContentEntityBase implements AnswerInterface {
         'settings' => [
           'display_label' => FALSE,
         ],
-        'weight' => 0,
+        'weight' => 5,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'type' => 'boolean',
         'label' => 'above',
-        'weight' => 0,
+        'weight' => 5,
         'settings' => [
           'format' => 'enabled-disabled',
         ],
