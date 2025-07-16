@@ -14,9 +14,8 @@
  * @see https://www.drupal.org/node/2869443
  * @see https://www.drupal.org/node/2721595
  */
-function restui_post_update_resource_granularity()
-{
-    include_once \Drupal::root() . '/core/modules/rest/rest.post_update.php';
-    // @phpstan-ignore-next-line
-    rest_post_update_resource_granularity();
+function restui_post_update_resource_granularity() {
+  require_once \Drupal::root() . '/core/modules/rest/rest.post_update.php';
+  // @phpstan-ignore-next-line
+  rest_post_update_resource_granularity();
 }

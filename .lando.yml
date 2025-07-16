@@ -6,6 +6,9 @@ config:
   xdebug: true
   config:
     php: lando/php.ini
+services:
+  database:
+    portforward: 5433
 tooling:
   phpcs:
     service: appserver

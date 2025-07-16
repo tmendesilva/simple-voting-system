@@ -1,6 +1,0 @@
-web/core/**/*
-vendor/**/*
-node_modules/**/*
-web/sites/**/files/**/*
-libraries/**/*
-web/sites/**/libraries/**/*

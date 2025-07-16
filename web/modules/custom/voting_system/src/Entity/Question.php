@@ -106,7 +106,7 @@ class Question extends ContentEntityBase implements QuestionInterface {
           'match_operator' => 'CONTAINS',
           'match_limit' => 10,
           'size' => 60,
-          'placeholder' => '',
+          'placeholder' => t('Enter here answer title...'),
         ],
         'weight' => 0,
       ])
