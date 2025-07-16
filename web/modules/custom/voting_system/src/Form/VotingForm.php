@@ -6,6 +6,7 @@ namespace Drupal\voting_system\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\voting_system\QuestionInterface;
 use Drupal\voting_system\Service\QuestionService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -19,6 +20,12 @@ final class VotingForm extends FormBase {
    *
    * @var \Drupal\voting_system\Service\QuestionService */
   protected QuestionService $questionService;
+
+  /**
+   * The question entity.
+   *
+   * @var \Drupal\voting_system\QuestionInterface | null */
+  protected QuestionInterface|null $questionEntity;
 
   public function __construct(
     QuestionService $question_service,
@@ -47,27 +54,27 @@ final class VotingForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
 
-    $questionEntity = $this->questionService->loadRandomQuestion();
+    $form['#attributes']['novalidate'] = 'novalidate';
+
+    $this->questionEntity = $this->questionService->loadRandomQuestion();
+    if (!$this->questionEntity) {
+      $form['message'] = [
+        '#markup' => $this->t('No question available'),
+      ];
+      return $form;
+    }
 
     $form['question_id'] = [
       '#type' => 'hidden',
-      '#value' => $questionEntity->id(),
+      '#value' => $this->questionEntity->id(),
     ];
 
-    $form['question_text'] = [
-      '#markup' => $questionEntity->get('title')->value,
-    ];
-
-    $answers = $this->questionService->getAnswerFieldValues($questionEntity);
-    // $allowedValues = $this->questionService->getAnswerAllowedValues();
-    $options = array_column($answers, 'title', 'id');
-    var_dump($options);
-    die();
     $form['answer'] = [
       '#type' => 'radios',
-      '#title' => '',
-      '#options' => $options,
-      '#default_value' => NULL,
+      '#title' => $this->questionEntity->get('title')->value,
+      '#options' => $this->getAnswerOptions(),
+      '#required' => TRUE,
+      '#default_value' => '',
     ];
 
     $form['actions'] = [
@@ -84,8 +91,34 @@ final class VotingForm extends FormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $this->messenger()->addStatus($this->t('The configuration has been updated.'));
+    try {
+      $this->questionService->vote($form_state->getValue('answer'));
+      $this->messenger()->addStatus($this->t('The vote has been recorded.'));
+    }
+    catch (\Exception $e) {
+      $this->messenger()->addError($e->getMessage());
+      return;
+    }
+    $form_state->setRebuild();
+  }
+
+  /**
+   * Gets answer options.
+   */
+  private function getAnswerOptions(): array {
+    $answers = $this->questionService->getAnswerFieldValues($this->questionEntity);
+    array_walk($answers, function (&$answer) {
+      $answer['id'] = (string) $answer['id'];
+    });
+    return array_column($answers, 'title', 'id');
   }
 
 }

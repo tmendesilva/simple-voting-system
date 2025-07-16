@@ -12,20 +12,24 @@ use Drupal\user\Entity\User;
  */
 function voting_system_install($is_syncing) :void {
 
-  // Create a new users objects.
-  $userAdmin = User::create();
-  $userAdmin->setUsername('api_admin');
-  $userAdmin->setPassword('api@test');
+  $userAdmin = User::load(1);
   $userAdmin->addRole('rest_admin');
-  $userAdmin->enforceIsNew();
-  $userAdmin->activate();
   $userAdmin->save();
 
-  $userAdmin = User::create();
-  $userAdmin->setUsername('api_public');
-  $userAdmin->setPassword('api@public');
-  $userAdmin->addRole('rest_public');
-  $userAdmin->enforceIsNew();
-  $userAdmin->activate();
-  $userAdmin->save();
+  // Create a new users objects.
+  $userApiAdmin = User::create();
+  $userApiAdmin->setUsername('api_admin');
+  $userApiAdmin->setPassword('api@test');
+  $userApiAdmin->addRole('rest_admin');
+  $userApiAdmin->enforceIsNew();
+  $userApiAdmin->activate();
+  $userApiAdmin->save();
+
+  $userApiPublic = User::create();
+  $userApiPublic->setUsername('api_public');
+  $userApiPublic->setPassword('api@public');
+  $userApiPublic->addRole('rest_public');
+  $userApiPublic->enforceIsNew();
+  $userApiPublic->activate();
+  $userApiPublic->save();
 }

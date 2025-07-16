@@ -2,7 +2,7 @@ name: simple-voting-system
 recipe: drupal11
 config:
   webroot: web
-  # database: postgres
+  database: postgres
   xdebug: true
   config:
     php: lando/php.ini

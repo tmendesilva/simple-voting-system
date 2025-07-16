@@ -134,4 +134,13 @@ class QuestionService {
     return array_keys($answerOptions);
   }
 
+  /**
+   * Computes votes.
+   */
+  public function vote($answerId) {
+    $answerEntity = $this->answerEntityStorage->load($answerId);
+    $answerEntity->set('votes', ((int) $answerEntity->get('votes')->value) + 1);
+    $answerEntity->save();
+  }
+
 }
