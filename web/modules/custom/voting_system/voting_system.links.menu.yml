@@ -1,23 +1,30 @@
 entity.voting_system_question.settings:
-  title: 'Question'
-  description: 'Configure a Question entity type.'
-  route_name:  entity.voting_system_question.settings
+  title: "Question"
+  description: "Configure a Question entity type."
+  route_name: entity.voting_system_question.settings
   parent: system.admin_structure
 
 entity.voting_system_question.collection:
-  title: 'Questions'
-  description: 'List of questions.'
+  title: "Questions"
+  description: "List of questions."
   route_name: entity.voting_system_question.collection
   parent: system.admin_content
 
 entity.voting_system_answer.settings:
-  title: 'Answer'
-  description: 'Configure an Answer entity type.'
-  route_name:  entity.voting_system_answer.settings
+  title: "Answer"
+  description: "Configure an Answer entity type."
+  route_name: entity.voting_system_answer.settings
   parent: system.admin_structure
 
 entity.voting_system_answer.collection:
-  title: 'Answers'
-  description: 'List of answers.'
+  title: "Answers"
+  description: "List of answers."
   route_name: entity.voting_system_answer.collection
   parent: system.admin_content
+
+voting_system.admin_settings:
+  title: "Voting System"
+  description: "Configure settings for voting system."
+  parent: system.admin_config_system
+  route_name: vote_system.configuration
+  weight: 100

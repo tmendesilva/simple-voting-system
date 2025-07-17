@@ -31,7 +31,7 @@ vote_system.configuration:
     _form: '\Drupal\voting_system\Form\SystemConfigurationForm'
     _title: "System Configuration"
   requirements:
-    _permission: "administer voting_system_answer"
+    _permission: "administer"
 
 vote_system.vote:
   path: "/vote-system/vote"
