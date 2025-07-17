@@ -64,6 +64,30 @@ final class VotingForm extends FormBase {
       return $form;
     }
 
+    if ($form_state->get('showResults')) {
+
+      $form['question'] = [
+        '#markup' => $questionEntity->get('title')->value,
+      ];
+
+      $form['pool'] = [
+        '#theme' => 'voting_system_answer',
+        '#answers' => $this->questionService->getAnswerFieldValues($questionEntity),
+      ];
+
+      $form['actions'] = [
+        '#type' => 'actions',
+        'submit' => [
+          '#type' => 'submit',
+          '#value' => $this->t('Answer another question'),
+        ],
+      ];
+
+      $form_state->set('loadAnotherQuestion', TRUE);
+
+      return $form;
+    }
+
     $form['question_id'] = [
       '#type' => 'hidden',
       '#value' => $questionEntity->id(),
@@ -96,12 +120,24 @@ final class VotingForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
+
+    if ($form_state->get('loadAnotherQuestion')) {
+      $form_state->cleanValues();
+      $form_state->setRedirect('<front>');
+      return;
+    }
+
     try {
       $this->questionService->vote($form_state->getValue('answer'));
       $this->messenger()->addStatus($this->t('The vote has been recorded.'));
     }
     catch (\Exception $e) {
       $this->messenger()->addError($e->getMessage());
+    }
+
+    if ($this->questionService->showResultsAfterVote()) {
+      $form_state->set('showResults', TRUE);
+      $form_state->setRebuild();
     }
   }
 

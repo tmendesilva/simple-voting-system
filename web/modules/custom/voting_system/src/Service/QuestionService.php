@@ -108,13 +108,9 @@ class QuestionService {
       $answerValues[] = $this->getFieldValues($answerEntity);
     }
 
-    // Calculate percentage.
-    $account = \Drupal::currentUser();
-    if (in_array('rest_admin', $account->getRoles())) {
-      $totalVotes = array_sum(array_column($answerValues, 'votes'));
-      foreach ($answerValues as $i => $answerValue) {
-        $answerValues[$i]['percentage'] = $totalVotes ? $answerValue['votes'] / $totalVotes : 0;
-      }
+    $totalVotes = array_sum(array_column($answerValues, 'votes'));
+    foreach ($answerValues as $i => $answerValue) {
+      $answerValues[$i]['percentage'] = $totalVotes ? $answerValue['votes'] / $totalVotes : 0;
     }
 
     return $answerValues;

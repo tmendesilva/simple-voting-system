@@ -18,7 +18,7 @@ class VotingSystemController extends ControllerBase {
   protected $configFactory;
 
   /**
-   * MyController constructor.
+   * VotingSystemController constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    */
