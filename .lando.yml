@@ -2,13 +2,15 @@ name: simple-voting-system
 recipe: drupal11
 config:
   webroot: web
+  via: nginx
   database: postgres
-  xdebug: true
-  config:
-    php: lando/php.ini
+  xdebug: "develop,debug"
 services:
   database:
     portforward: 5433
+  appserver:
+    config:
+      php: lando/php.ini
 tooling:
   phpcs:
     service: appserver

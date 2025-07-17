@@ -2,6 +2,7 @@
 
 namespace Drupal\voting_system\Service;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManager;
@@ -26,9 +27,52 @@ class QuestionService {
    */
   private EntityStorageInterface $answerEntityStorage;
 
-  public function __construct(EntityTypeManager $entity_type_manager) {
+  /**
+   * The configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private ConfigFactoryInterface $configFactory;
+
+  public function __construct(
+    EntityTypeManager $entity_type_manager,
+    ConfigFactoryInterface $config_factory,
+  ) {
     $this->questionEntityStorage = $entity_type_manager->getStorage('voting_system_question');
     $this->answerEntityStorage = $entity_type_manager->getStorage('voting_system_answer');
+    $this->configFactory = $config_factory;
+  }
+
+  /**
+   * Gets system status.
+   */
+  public function isActive() :bool {
+    $config = $this->configFactory->get('voting_system.settings');
+    return (bool) $config->get('voting_system_status');
+  }
+
+  /**
+   * Sets system status.
+   */
+  public function setStatus($status) {
+    $config = $this->configFactory->getEditable('voting_system.settings');
+    $config->set('voting_system_status', $status)->save();
+  }
+
+  /**
+   * Gets config for show results after vote.
+   */
+  public function showResultsAfterVote() :bool {
+    $config = $this->configFactory->get('voting_system.settings');
+    return (bool) $config->get('show_results');
+  }
+
+  /**
+   * Sets config for show results after vote.
+   */
+  public function setShowResultsAfterVote($status) {
+    $config = $this->configFactory->getEditable('voting_system.settings');
+    $config->set('show_results', $status)->save();
   }
 
   /**
@@ -105,14 +149,18 @@ class QuestionService {
    * @return \Drupal\Core\Entity\QuestionInterface|null
    *   The random entity object, or NULL if no entity is found.
    */
-  public function loadRandomQuestion(): QuestionInterface|null {
+  public function loadQuestion(int|null $questionId = NULL): QuestionInterface|null {
+
+    if ($questionId) {
+      return $this->questionEntityStorage->load($questionId);
+    }
+
+    // Random question.
     $query = Database::getConnection()->select('voting_system_question_field_data', 'q')
       ->fields('q', ['id'])
-      ->condition('status', 1);
-
-    $query->orderRandom()
+      ->condition('status', 1)
+      ->orderRandom()
       ->range(0, 1);
-
     $result = $query->execute()->fetchAssoc();
 
     if ($result) {

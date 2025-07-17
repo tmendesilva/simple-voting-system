@@ -6,12 +6,11 @@ namespace Drupal\voting_system\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\voting_system\QuestionInterface;
 use Drupal\voting_system\Service\QuestionService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Configuration form for a question entity type.
+ * Configuration form.
  */
 final class VotingForm extends FormBase {
 
@@ -20,12 +19,6 @@ final class VotingForm extends FormBase {
    *
    * @var \Drupal\voting_system\Service\QuestionService */
   protected QuestionService $questionService;
-
-  /**
-   * The question entity.
-   *
-   * @var \Drupal\voting_system\QuestionInterface | null */
-  protected QuestionInterface|null $questionEntity;
 
   public function __construct(
     QuestionService $question_service,
@@ -54,28 +47,39 @@ final class VotingForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
 
-    $form['#attributes']['novalidate'] = 'novalidate';
-
-    $this->questionEntity = $this->questionService->loadRandomQuestion();
-    if (!$this->questionEntity) {
+    if (!$this->questionService->isActive()) {
       $form['message'] = [
-        '#markup' => $this->t('No question available'),
+        '#markup' => $this->t('Voting system is temporarily disabled.'),
+      ];
+      return $form;
+    }
+
+    $userInput = $form_state->getUserInput();
+    $questionEntity = $this->questionService->loadQuestion((int) $userInput['question_id'] ?? NULL);
+
+    if (!$questionEntity) {
+      $form['message'] = [
+        '#markup' => $this->t('No question available.'),
       ];
       return $form;
     }
 
     $form['question_id'] = [
       '#type' => 'hidden',
-      '#value' => $this->questionEntity->id(),
+      '#value' => $questionEntity->id(),
     ];
 
+    $form['question'] = [
+      '#markup' => $questionEntity->get('title')->value,
+    ];
+
+    $options = $this->getAnswerOptions($questionEntity);
     $form['answer'] = [
       '#type' => 'radios',
-      '#title' => $this->questionEntity->get('title')->value,
-      '#options' => $this->getAnswerOptions(),
+      '#title' => '',
+      '#options' => $options['options'],
       '#required' => TRUE,
-      '#default_value' => '',
-    ];
+    ] + $options['description'];
 
     $form['actions'] = [
       '#type' => 'actions',
@@ -91,13 +95,6 @@ final class VotingForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     try {
       $this->questionService->vote($form_state->getValue('answer'));
@@ -105,20 +102,24 @@ final class VotingForm extends FormBase {
     }
     catch (\Exception $e) {
       $this->messenger()->addError($e->getMessage());
-      return;
     }
-    $form_state->setRebuild();
   }
 
   /**
    * Gets answer options.
    */
-  private function getAnswerOptions(): array {
-    $answers = $this->questionService->getAnswerFieldValues($this->questionEntity);
-    array_walk($answers, function (&$answer) {
-      $answer['id'] = (string) $answer['id'];
-    });
-    return array_column($answers, 'title', 'id');
+  private function getAnswerOptions($questionEntity): array {
+    $answers = $this->questionService->getAnswerFieldValues($questionEntity);
+    $descriptions = [];
+    foreach ($answers as $answer) {
+      $descriptions[$answer['id']] = [
+        '#description' => $answer['description'],
+      ];
+    }
+    return [
+      'options' => array_column($answers, 'title', 'id'),
+      'description' => $descriptions,
+    ];
   }
 
 }

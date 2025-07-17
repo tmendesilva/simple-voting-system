@@ -25,6 +25,14 @@ entity.voting_system_answer.settings:
   requirements:
     _permission: "administer voting_system_answer"
 
+vote_system.configuration:
+  path: "/vote-system/configuration"
+  defaults:
+    _form: '\Drupal\voting_system\Form\SystemConfigurationForm'
+    _title: "System Configuration"
+  requirements:
+    _permission: "administer voting_system_answer"
+
 vote_system.vote:
   path: "/vote-system/vote"
   defaults:

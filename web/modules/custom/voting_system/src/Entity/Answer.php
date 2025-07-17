@@ -30,7 +30,7 @@ use Drupal\voting_system\Routing\AnswerHtmlRouteProvider;
     'id' => 'id',
     'title' => 'title',
     'description' => 'description',
-    'image' => 'image',
+    // 'image' => 'image',
     'votes' => 'votes',
     'langcode' => 'langcode',
     'published' => 'status',
@@ -107,27 +107,27 @@ class Answer extends ContentEntityBase implements AnswerInterface {
       ])
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['image'] = BaseFieldDefinition::create('image')
-      ->setTranslatable(TRUE)
-      ->setLabel(t('Image'))
-      ->setDescription(t('Image field'))
-      ->setSettings([
-        'file_directory' => 'IMAGE_FOLDER',
-        'alt_field_required' => FALSE,
-        'file_extensions' => 'png jpg jpeg',
-      ])
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'default',
-        'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'image_image',
-        'weight' => 0,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
+    // $fields['image'] = BaseFieldDefinition::create('image')
+    //   ->setTranslatable(TRUE)
+    //   ->setLabel(t('Image'))
+    //   ->setDescription(t('Image field'))
+    //   ->setSettings([
+    //     'file_directory' => 'image',
+    //     'alt_field_required' => FALSE,
+    //     'file_extensions' => 'png jpg jpeg',
+    //   ])
+    //   ->setDisplayOptions('view', [
+    //     'label' => 'above',
+    //     'type' => 'default',
+    //     'weight' => 0,
+    //   ])
+    //   ->setDisplayOptions('form', [
+    //     'type' => 'image_image',
+    //     'weight' => 0,
+    //   ])
+    //   ->setDisplayConfigurable('form', TRUE)
+    //   ->setDisplayConfigurable('view', TRUE)
+    //   ->setRequired(FALSE);
     $fields['votes'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Votes'))
       ->setDefaultValue(0)

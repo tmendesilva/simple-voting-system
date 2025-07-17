@@ -12,6 +12,7 @@ use Drupal\user\Entity\User;
  */
 function voting_system_install($is_syncing) :void {
 
+  // Add role to admin user.
   $userAdmin = User::load(1);
   $userAdmin->addRole('rest_admin');
   $userAdmin->save();
@@ -32,4 +33,10 @@ function voting_system_install($is_syncing) :void {
   $userApiPublic->enforceIsNew();
   $userApiPublic->activate();
   $userApiPublic->save();
+
+  // Set voting system active.
+  $config = \Drupal::configFactory()->getEditable('voting_system.settings');
+  $config->set('voting_system_status', TRUE);
+  $config->set('show_results', TRUE);
+  $config->save();
 }
