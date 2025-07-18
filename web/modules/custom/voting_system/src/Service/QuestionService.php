@@ -6,10 +6,11 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManager;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\voting_system\QuestionInterface;
 
 /**
- *
+ * Question service class.
  */
 class QuestionService {
 
@@ -34,13 +35,32 @@ class QuestionService {
    */
   private ConfigFactoryInterface $configFactory;
 
+  /**
+   * The file url generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  private FileUrlGeneratorInterface $fileUrlGenerator;
+
+  /**
+   * {@inheritdoc}
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManager $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The configuration factory.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
+   *   The file url generator.
+   */
   public function __construct(
     EntityTypeManager $entity_type_manager,
     ConfigFactoryInterface $config_factory,
+    FileUrlGeneratorInterface $file_url_generator,
   ) {
     $this->questionEntityStorage = $entity_type_manager->getStorage('voting_system_question');
     $this->answerEntityStorage = $entity_type_manager->getStorage('voting_system_answer');
     $this->configFactory = $config_factory;
+    $this->fileUrlGenerator = $file_url_generator;
   }
 
   /**
@@ -87,7 +107,13 @@ class QuestionService {
   public function getFieldValues($entity) {
     $fieldValues = [];
     foreach ($entity->getFields() as $attr => $field) {
-      $fieldValues[$attr] = $field->value;
+      if ($attr === 'image') {
+        $fileUri = $field?->entity?->getFileUri();
+        $fieldValues[$attr] = $fileUri ? $this->fileUrlGenerator->generateAbsoluteString($field?->entity?->getFileUri()) : NULL;
+      }
+      else {
+        $fieldValues[$attr] = $field->value;
+      }
     }
     return $fieldValues;
   }
@@ -154,11 +180,10 @@ class QuestionService {
     // Random question.
     $query = Database::getConnection()->select('voting_system_question_field_data', 'q')
       ->fields('q', ['id'])
-      ->condition('status', 1)
-      ->orderRandom()
+      ->condition('status', 1);
+    $query->orderRandom()
       ->range(0, 1);
     $result = $query->execute()->fetchAssoc();
-
     if ($result) {
       return $this->questionEntityStorage->load($result['id']);
     }

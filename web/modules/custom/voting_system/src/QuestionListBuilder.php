@@ -53,12 +53,10 @@ final class QuestionListBuilder extends EntityListBuilder {
    */
   public function load() {
     $entityQuery = $this->getStorage('voting_system_question')->getQuery();
-    $header = $this->buildHeader();
     $entityQuery
       ->accessCheck(TRUE)
       ->pager(10)
-      ->sort('id', 'DESC')
-      ->tableSort($header);
+      ->sort('id', 'DESC');
     $ids = $entityQuery->execute();
     return $this->storage->loadMultiple($ids);
   }
@@ -91,7 +89,7 @@ final class QuestionListBuilder extends EntityListBuilder {
   }
 
   /**
-   *
+   * Renders answers.
    */
   private function renderAnswers(array $answers) {
     $renderarray = [

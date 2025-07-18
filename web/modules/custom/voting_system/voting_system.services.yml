@@ -1,4 +1,5 @@
 services:
   voting_system.question_service:
     class: Drupal\voting_system\Service\QuestionService
-    arguments: ["@entity_type.manager", "@config.factory"]
+    arguments:
+      ["@entity_type.manager", "@config.factory", "@file_url_generator"]

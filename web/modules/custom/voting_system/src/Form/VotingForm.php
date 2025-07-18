@@ -47,6 +47,8 @@ final class VotingForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
 
+    $form['#cache']['contexts'][] = 'session';
+
     if (!$this->questionService->isActive()) {
       $form['message'] = [
         '#markup' => $this->t('Voting system is temporarily disabled.'),
@@ -148,8 +150,12 @@ final class VotingForm extends FormBase {
     $answers = $this->questionService->getAnswerFieldValues($questionEntity);
     $descriptions = [];
     foreach ($answers as $answer) {
+      $image = '';
+      if ($answer['image']) {
+        $image = '<img src="' . $answer['image'] . '"/><br>';
+      }
       $descriptions[$answer['id']] = [
-        '#description' => $answer['description'],
+        '#description' => $image . $answer['description'],
       ];
     }
     return [

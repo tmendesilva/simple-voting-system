@@ -9,7 +9,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\rest\Attribute\RestResource;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ModifiedResourceResponse;
-use Drupal\voting_system\Entity\Answer;
 use Drupal\voting_system\Entity\Question;
 use Drupal\voting_system\Service\QuestionService;
 use Psr\Log\LoggerInterface;
@@ -145,12 +144,12 @@ class QuestionResource extends ResourceBase {
     catch (\Exception $e) {
       return new ModifiedResourceResponse([
         'message' => $this->t('Error on saving entity: @message', ['@message' => $e->getMessage()]),
-      ], 400);
+      ], 500);
     }
   }
 
   /**
-   * Adds a vote to an answer.
+   * Updates a question.
    *
    * @param array $data
    *   The request data.
@@ -160,42 +159,36 @@ class QuestionResource extends ResourceBase {
    */
   public function patch($data) {
 
-    if (!$this->isActive) {
+    if (!isset($data['id'])) {
       return new ModifiedResourceResponse([
-        'message' => $this->t('Voting is temporarily disabled'),
-      ], 503);
+        'message' => $this->t('Id key is required'),
+      ], 400);
     }
 
-    $questionId = $data['question'] ?? NULL;
-    $questionEntity = Question::load($questionId);
+    if (array_keys($data) !== ['id', 'status']) {
+      return new ModifiedResourceResponse([
+        'message' => $this->t('Only \'status\' can be updated!'),
+      ], 400);
+    }
+
+    $questionEntity = Question::load($data['id']);
     if (!$questionEntity) {
       return new ModifiedResourceResponse([
-        'message' => $this->t('Question @id not found', ['@id' => $questionId]),
+        'message' => $this->t('Question @id not found', ['@id' => $data['id']]),
       ], 404);
     }
-
-    $answers = $this->questionService->getAnswerFieldValues($questionEntity);
-    $answerIds = array_column($answers, 'id');
-    $answerId = $data['answer'] ?? NULL;
-    if (!in_array($answerId, $answerIds)) {
-      return new ModifiedResourceResponse([
-        'message' => $this->t('Answer @id not found', ['@id' => $data['answer']]),
-      ], 404);
-    }
-
-    $answerEntity = Answer::load($answerId);
-    $answerEntity->set('votes', ((int) $answerEntity->get('votes')->value) + 1);
 
     try {
-      $answerEntity->save();
+      $questionEntity->set('status', (bool) $data['status']);
+      $questionEntity->save();
       return new ModifiedResourceResponse([
-        'message' => $this->t('Vote added successfully!'),
+        'message' => $this->t('Question updated successfully'),
       ]);
     }
     catch (\Exception $e) {
       return new ModifiedResourceResponse([
-        'message' => $this->t('Error on adding vote to question!'),
-      ], 400);
+        'message' => $this->t('Error on updating question: @message', ['@message' => $e->getMessage()]),
+      ], 500);
     }
   }
 

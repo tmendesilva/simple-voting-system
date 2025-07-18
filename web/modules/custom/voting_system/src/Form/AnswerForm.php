@@ -6,6 +6,7 @@ namespace Drupal\voting_system\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Form controller for the answer entity edit forms.
@@ -52,7 +53,7 @@ final class AnswerForm extends ContentEntityForm {
         throw new \LogicException('Could not save the entity.');
     }
 
-    $form_state->setRedirectUrl($this->entity->toUrl('collection'));
+    $form_state->setRedirectUrl(Url::fromRoute('entity.voting_system_question.collection'));
 
     return $result;
   }
