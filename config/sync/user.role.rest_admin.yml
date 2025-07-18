@@ -17,3 +17,4 @@ permissions:
   - 'restful get question_resource'
   - 'restful patch question_resource'
   - 'restful post question_resource'
+  - 'restful put question_resource'
