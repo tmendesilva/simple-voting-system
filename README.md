@@ -1,4 +1,4 @@
-<img alt="Drupal Logo" src="https://www.drupal.org/files/Wordmark_blue_RGB.png" height="60px">
+<img alt="Drupal Logo" src="http://www.drupal.org/files/Wordmark_blue_RGB.png" height="60px">
 
 # Voting System
 
@@ -6,6 +6,9 @@
 
 - Start lando
   `lando start`
+
+- Install dependencies
+  `lando composer install`
 
 - Run Site-Install
   `lando drush si minimal --db-url "pgsql://postgres:@database:5432/drupal11?module=pgsql"`
@@ -15,7 +18,7 @@
 
 ## Features
 
-- Admin login `lando drush uli --uri="https://simple-voting-system.lndo.site/" --browser`
+- Admin login `lando drush uli --uri="http://simple-voting-system.lndo.site/" --browser`
 
 - Manage questions
   [http://simple-voting-system.lndo.site/admin/content/question](http://simple-voting-system.lndo.site/admin/content/question)
