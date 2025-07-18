@@ -1,6 +1,33 @@
 <img alt="Drupal Logo" src="http://www.drupal.org/files/Wordmark_blue_RGB.png" height="60px">
 
-# Voting System
+# Simple Voting System
+
+This project is built on top of Drupal and features a custom module designed to simulate a voting system. The module introduces two custom entities: **Question** and **Answer**. The system allows users to cast votes on answers, and the votes are computed to determine the outcome.
+
+## Custom Entities
+
+- **Question**: Represents a question that can be voted on.
+- **Answer**: Represents a possible answer to a question.
+
+## Voting System
+
+The voting system is designed to allow users to cast votes on answers. The votes are then computed to determine the outcome. The system can be used to simulate various types of voting scenarios.
+
+## REST API
+
+A REST API has been developed using Drupal's RESTful Web Services module to interact with the data about entities and voting results. This allows external applications to retrieve and manipulate data related to questions, answers, and voting results.
+
+## Key Features
+
+- Custom entities for questions and answers
+- Voting system to compute votes
+- REST API using Drupal's BaseResource API for data interaction
+
+## Technical Details
+
+- Built on top of Drupal
+- Custom module developed to introduce new entities and functionality
+- REST API built using Drupal's RESTful Web Services module and ResourceBase plugin
 
 ## Getting start
 
@@ -27,7 +54,7 @@
   lando db-import data/dump.sql.gz
   ```
 
-## Features
+## Shortcuts
 
 - Admin login
 
