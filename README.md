@@ -5,20 +5,35 @@
 ## Getting start
 
 - Start lando
-  `lando start`
+
+  ```bash
+  lando start
+  ```
 
 - Install dependencies
-  `lando composer install`
+
+  ```bash
+  lando composer install
+  ```
 
 - Run Site-Install
-  `lando drush si minimal --db-url "pgsql://postgres:@database:5432/drupal11?module=pgsql"`
+
+  ```bash
+  lando drush si minimal --db-url "pgsql://postgres:@database:5432/drupal11?module=pgsql" --config-dir "../config/sync/"
+  ```
 
 - Restore database
-  `lando db-import data/dump.sql.gz`
+  ```bash
+  lando db-import data/dump.sql.gz
+  ```
 
 ## Features
 
-- Admin login `lando drush uli --uri="http://simple-voting-system.lndo.site/" --browser`
+- Admin login
+
+  ```bash
+  lando drush uli --uri="http://simple-voting-system.lndo.site/" --browser
+  ```
 
 - Manage questions
   [http://simple-voting-system.lndo.site/admin/content/question](http://simple-voting-system.lndo.site/admin/content/question)
