@@ -26,7 +26,11 @@ final class QuestionListBuilder extends EntityListBuilder {
   /**
    * {@inheritdoc}
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, QuestionService $question_service) {
+  public function __construct(
+    EntityTypeInterface $entity_type,
+    EntityStorageInterface $storage,
+    QuestionService $question_service,
+  ) {
     $this->entityTypeId = $entity_type->id();
     $this->storage = $storage;
     $this->entityType = $entity_type;
@@ -42,6 +46,21 @@ final class QuestionListBuilder extends EntityListBuilder {
       $container->get('entity_type.manager')->getStorage($entity_type->id()),
       $container->get('voting_system.question_service'),
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function load() {
+    $entityQuery = $this->getStorage('voting_system_question')->getQuery();
+    $header = $this->buildHeader();
+    $entityQuery
+      ->accessCheck(TRUE)
+      ->pager(10)
+      ->sort('id', 'DESC')
+      ->tableSort($header);
+    $ids = $entityQuery->execute();
+    return $this->storage->loadMultiple($ids);
   }
 
   /**

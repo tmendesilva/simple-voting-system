@@ -11,6 +11,7 @@ declare(strict_types=1);
  * Provides a question entity type.
  */
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Element;
@@ -58,4 +59,19 @@ function voting_system_entity_access(EntityInterface $entity, $operation, Accoun
     return AccessResult::forbidden();
   }
   return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function voting_system_form_voting_system_question_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // $form['title']['#disabled'] = TRUE;
+  // $form['answers_display']['#disabled'] = TRUE;
+}
+
+/**
+ * Implements hook_entity_preload().
+ */
+function voting_system_entity_preload(array $ids, $entity_type_id) {
+
 }

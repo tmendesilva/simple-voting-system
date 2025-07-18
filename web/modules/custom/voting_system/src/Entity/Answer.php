@@ -34,6 +34,7 @@ use Drupal\voting_system\Routing\AnswerHtmlRouteProvider;
     'votes' => 'votes',
     'langcode' => 'langcode',
     'published' => 'status',
+    'label' => 'title',
   ],
   handlers: [
     'list_builder' => AnswerListBuilder::class,

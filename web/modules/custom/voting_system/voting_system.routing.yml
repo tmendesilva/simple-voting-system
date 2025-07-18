@@ -1,14 +1,3 @@
-voting_system.status:
-  path: "/vote-system/status"
-  defaults:
-    _controller: '\Drupal\voting_system\Controller\VotingSystemController::content'
-    _title: "Vote System Status"
-  methods: [PUT]
-  requirements:
-    _permission: "Administer voting"
-  options:
-    _auth: ["basic_auth"]
-
 entity.voting_system_question.settings:
   path: "admin/structure/voting-system-question"
   defaults:
@@ -40,3 +29,14 @@ vote_system.vote:
     _title: "Voting"
   requirements:
     _permission: "access content"
+
+voting_system.status:
+  path: "/vote-system/status"
+  defaults:
+    _controller: '\Drupal\voting_system\Controller\VotingSystemController::content'
+    _title: "Vote System Status"
+  methods: [PUT]
+  requirements:
+    _permission: "Administer voting"
+  options:
+    _auth: ["basic_auth"]

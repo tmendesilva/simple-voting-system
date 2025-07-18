@@ -13,12 +13,17 @@
  * @see template_preprocess_voting_system_question()
  */
 #}
+{% set inAdmin = (path('<current>') == '/admin/content/question') %}
+{{ isAdmin }}
 <table>
   <thead>
     <tr>
       <th>{{'Options' | t}}</th>
       <th>{{'Votes' | t}}</th>
       <th>{{'Percentage' | t}}</th>
+      {% if inAdmin %}
+        <th>{{'Operations' | t}}</th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -27,6 +32,11 @@
       <td>{{ answer.title }}</td>
       <td>{{ answer.votes }}</td>
       <td>{{ answer.percentage | number_format(2) }}</td>
+      {% if inAdmin %}
+        <td>
+          <a href="{{ path('entity.voting_system_answer.edit_form', {'voting_system_answer': answer.id}) }}">{{'Edit' | t}}</a>
+        </td>
+      {% endif %}
     </tr>
     {% endfor %}
   </tbody>

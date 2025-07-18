@@ -15,6 +15,20 @@ final class QuestionForm extends ContentEntityForm {
   /**
    * {@inheritdoc}
    */
+  public function form(array $form, FormStateInterface $form_state) {
+    $form = parent::form($form, $form_state);
+
+    if (!$this->entity->isNew()) {
+      $form['title']['#disabled'] = TRUE;
+      $form['answers']['#disabled'] = TRUE;
+    }
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function save(array $form, FormStateInterface $form_state): int {
     $result = parent::save($form, $form_state);
 

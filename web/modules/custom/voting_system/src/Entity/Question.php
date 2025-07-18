@@ -32,6 +32,7 @@ use Drupal\voting_system\QuestionListBuilder;
     'title' => 'title',
     'langcode' => 'langcode',
     'published' => 'status',
+    'title' => 'label',
   ],
   handlers: [
     'list_builder' => QuestionListBuilder::class,
@@ -95,11 +96,15 @@ class Question extends ContentEntityBase implements QuestionInterface {
       ->setLabel(t('Answers'))
       ->setDescription(t('The answers of the question.'))
       ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-      ->setSettings([
-        'target_type' => 'voting_system_answer',
-        'default_value' => [],
-      ])
       ->setRequired(TRUE)
+      ->setSetting('target_type', 'voting_system_answer')
+      ->setSetting('handler', 'default:answer')
+      ->setSetting('handler_settings', [
+        'filter' => [
+          'status' => ['1'],
+        ],
+        'auto_create' => TRUE,
+      ])
       ->setDisplayOptions('form', [
         'type' => 'entity_reference_autocomplete',
         'settings' => [
@@ -107,6 +112,8 @@ class Question extends ContentEntityBase implements QuestionInterface {
           'match_limit' => 10,
           'size' => 60,
           'placeholder' => t('Enter here answer title...'),
+          'description' => t('Enter your email address.'),
+          'auto_create' => TRUE,
         ],
         'weight' => 0,
       ])
