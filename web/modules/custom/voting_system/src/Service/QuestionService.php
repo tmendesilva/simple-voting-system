@@ -166,6 +166,17 @@ class QuestionService {
   }
 
   /**
+   * Gets question ids.
+   */
+  public function getIds() {
+    $qids = $this->questionEntityStorage->getQuery()
+      ->condition('status', 1)
+      ->accessCheck(FALSE)
+      ->execute();
+    return $qids;
+  }
+
+  /**
    * Loads a random question.
    *
    * @return \Drupal\Core\Entity\QuestionInterface|null

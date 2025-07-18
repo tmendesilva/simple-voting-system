@@ -12,6 +12,8 @@ use Drupal\rest\ModifiedResourceResponse;
 use Drupal\voting_system\Entity\Question;
 use Drupal\voting_system\Service\QuestionService;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides a Question Resource.
@@ -28,12 +30,21 @@ class QuestionResource extends ResourceBase {
 
   use StringTranslationTrait;
 
+  public const PAGE_SIZE = 5;
+
   /**
    * The configuration factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   private ConfigFactoryInterface $configFactory;
+
+  /**
+   * The Request service.
+   *
+   * @var Symfony\Component\HttpFoundation\Request
+   */
+  private Request $request;
 
   /**
    * The active status of the voting system.
@@ -56,12 +67,14 @@ class QuestionResource extends ResourceBase {
     array $serializer_formats,
     LoggerInterface $logger,
     ConfigFactoryInterface $config_factory,
+    RequestStack $requestStack,
     QuestionService $question_service,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger, $config_factory);
     $this->serializerFormats = $serializer_formats;
     $this->logger = $logger;
     $this->configFactory = $config_factory;
+    $this->request = $requestStack->getCurrentRequest();
 
     $config = $this->configFactory->getEditable('voting_system.settings');
     $this->isActive = (bool) $config->get('voting_system_status') ?? TRUE;
@@ -79,6 +92,7 @@ class QuestionResource extends ResourceBase {
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('rest'),
       $container->get('config.factory'),
+      $container->get('request_stack'),
       $container->get('voting_system.question_service'),
     );
   }
@@ -105,21 +119,31 @@ class QuestionResource extends ResourceBase {
    *   The HTTP response object.
    */
   public function get($id) {
-    if ($id) {
-      $questionsEntities[] = Question::load($id);
+    if (!$id) {
+      $qids = $this->questionService->getIds();
+      $page = $this->request->query->get('page');
+      if (!$page) {
+        $page = 1;
+      }
+      $questionsEntities = Question::loadMultiple(array_slice($qids, ($page - 1) * self::PAGE_SIZE, self::PAGE_SIZE));
+      $response = [
+        'total' => count($qids),
+        'page' => (int) $page,
+        'totalPages' => ceil(count($qids) / self::PAGE_SIZE),
+        'totalResults' => count($questionsEntities),
+      ];
     }
     else {
-      $questionsEntities = Question::loadMultiple();
+      $questionsEntities[] = Question::load($id);
     }
+
     $questions = [];
     foreach ($questionsEntities as $questionEntity) {
       $question = $this->questionService->getFieldValues($questionEntity);
       $question['answers'] = $this->questionService->getAnswerFieldValues($questionEntity);
       $questions[] = $question;
     }
-    $response = [
-      'data' => $questions,
-    ];
+    $response['data'] = $questions;
     return new ModifiedResourceResponse($response);
   }
 
