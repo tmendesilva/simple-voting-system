@@ -192,7 +192,7 @@ class QuestionService {
   }
 
   /**
-   *
+   * Gets answer allowed values.
    */
   public function getAnswerAllowedValues() :array {
     $answerOptions = Database::getConnection()->select('voting_system_question_field_data', 'q')

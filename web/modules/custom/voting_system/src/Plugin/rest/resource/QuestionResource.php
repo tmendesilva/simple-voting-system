@@ -167,7 +167,7 @@ class QuestionResource extends ResourceBase {
 
     if (array_keys($data) !== ['id', 'status']) {
       return new ModifiedResourceResponse([
-        'message' => $this->t('Only \'status\' can be updated!'),
+        'message' => $this->t("Only 'status' can be updated!"),
       ], 400);
     }
 
