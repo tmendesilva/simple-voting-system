@@ -47,6 +47,7 @@ final class VotingForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
 
+    // Avoids caching for anonymous users.
     $form['#cache']['contexts'][] = 'session';
 
     if (!$this->questionService->isActive()) {
